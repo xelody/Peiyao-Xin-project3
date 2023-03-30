@@ -1,12 +1,22 @@
 const express = require('express');
-const helper = require('./helper');
-const pokemon = require('./pokemon')
+const helper = require('./backend/helper');
+const pokemon = require('./backend/pokemon')
+const users = require('./backend/user')
 const app = express();
+const mongoose = require('mongoose')
+
+const mongoDBEndpoint = 'insert mondob string here'
+mongoose.connect(mongoDBEndpoint,  { useNewUrlParser: true });
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Error connecting to MongoDB:'));
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/pokemon/', pokemon);
+app.use('/api/users/', users)
 
 
 //"http://localhost:8000" + "/"
@@ -34,7 +44,7 @@ app.listen(8000, function() {
 
 // const server = http.createServer(function (request, response) {
 
-//     response.writeHead(404, { 'Content-Type': 'text/plain' });
+//     response.writeHead(200, { 'Content-Type': 'text/plain' });
 //     response.end('Hello web dev!');
 
 // })
