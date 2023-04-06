@@ -23,6 +23,13 @@ const pokemonDb = [
 
 // request.body should include name, color and health
 
+router.get('/findColor/:color', async function(request, response) {
+    const color = request.params.color;
+
+    const matchingPokemon = await PokemonModel.findPokemonByColor(color)
+    response.send(matchingPokemon);
+});
+
 // POST localhost:8000/api/pokemon/
 router.post('/', function(request, response) {
     const newPokemon = request.body;
@@ -31,13 +38,18 @@ router.post('/', function(request, response) {
     //     return response.status(422).send("Missing argument to create new pokemon");
     // }
 
+    console.log(1)
     PokemonModel.createPokemon(newPokemon)
         .then(function(dbResponse) {
+            console.log(2)
+
             response.send("Pokemon Successfully Created")
         })
         .catch(function(error) {
             response.status(500).send(error)
         })
+    console.log(3)
+
 
     //    pokemonDb.push(newPokemon);
 
@@ -118,6 +130,13 @@ router.get('/pikachu', function(req, res) {
 
 router.get('/', function(req, res) {
     res.send("This is the the base pokemon route")
+})
+
+router.delete('/:pokemonId', async function(req, response) {
+    const pokemonId = req.params.pokemonId;
+
+    const deleteResponse = await PokemonModel.deletePokemon(pokemonId)
+    return response.send("Successfully delete pokemon!")
 })
 
 router.post('/', function(req, res) {

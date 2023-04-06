@@ -4,14 +4,15 @@ const pokemon = require('./backend/pokemon')
 const users = require('./backend/user')
 const app = express();
 const mongoose = require('mongoose')
+const cors = require('cors')
 
-const mongoDBEndpoint = 'insert mondob string here'
+const mongoDBEndpoint = 'mongodb+srv://hunter:banana2@seawebdevfall2021.ykjok.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(mongoDBEndpoint,  { useNewUrlParser: true });
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Error connecting to MongoDB:'));
 
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

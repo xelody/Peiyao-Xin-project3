@@ -16,8 +16,18 @@ function getPokemonById(id) {
     return PokemonModel.findById(id).exec();
 }
 
+function findPokemonByColor(pokeColor) {
+    return PokemonModel.find({color: pokeColor}).exec();
+}
+
+function deletePokemon(pokemonId) {
+    return PokemonModel.deleteOne({_id: pokemonId}).exec();
+}
+
 module.exports = {
     createPokemon,
     returnAllPokemon,
     getPokemonById,
+    findPokemonByColor,
+    deletePokemon,
 }

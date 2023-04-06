@@ -1,21 +1,29 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 import axios from 'axios'
 
 
 //https://dog.ceo/api/breeds/image/random
 function App() {
 
-  const [dogImage, setDogImage] = useState('')
+  const [imgUrl, setImageUrl] = useState('')
+  const [err, setError] = useState('')
 
-  async function generateMonster() {
-    console.log("hello from line 14")
-    const response = await axios.get('https://dog.ceo/api/breeds/image/random')
-    console.log("hello from line 16")
-    setDogImage(response.data.message)
-    console.log("hello from line 18")
+  async function makeAnAPIRequest() {
+    setError('');
+    let response = await axios.get('https://randombig.cat/roar.json');
+    setImageUrl(response.data.url)
+
+    // .then(function(response) {
+      //   console.log(response)
+      //   console.log("This request went well")
+      //   setImageUrl(response.data.url);
+      //   //console.log("URL Response", response.data.url);
+      // })
+      // .catch(function(errorResponse) {
+      //   console.log("SOmething went wrong")
+      //   setError("There was an error making the request.  Please try again");
+      // })
+
     // axios.get('https://dog.ceo/api/breeds/image/random')
     //   .then(function(response) {
     //     setDogImage(response.data.message);
@@ -26,12 +34,13 @@ function App() {
   return (
     <div>
       <div>
-        Hello, click to generate a monster
+        Hello, click to generate a cat image
       </div>
-      <button onClick={generateMonster}>
+      <button onClick={makeAnAPIRequest}>
         Generate
       </button>
-      {dogImage ? <img src={dogImage} /> : null}
+      {err ? err : null}
+      {imgUrl ? <img src={imgUrl} height={600} width={600}/> : null}
 
     </div>
   )

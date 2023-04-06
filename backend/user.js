@@ -1,23 +1,29 @@
 const express = require('express')
 const router = express.Router();
 
+const UserModel = require('./db/user/user.model');
+
 const userDB = [];
 
 router.get('/', function(request, response) {
     response.send(userDB);
 })
 
-router.post('/', function(request, response) {
-    const newUser = request.body;
+router.post('/', async function(request, response) {
+    const body = request.body;
 
-    if(!newUser.username) {
-        response.status(401)
-        return response.send("Missing username")
-    }
-
-    userDB.push(newUser);
-
+    const newUserResponse = await UserModel.createUser(body)
+   
     response.send("Created new user!");
+})
+
+router.get('/:username', async function(req, res) {
+    const username = req.params.username;
+
+    const userData = await 
+    UserModel.findUserByUsername(username);
+
+    return res.send(userData);
 })
 
 module.exports = router
