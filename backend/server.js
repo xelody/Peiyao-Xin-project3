@@ -1,10 +1,11 @@
 const express = require('express');
-const helper = require('./backend/helper');
-const pokemon = require('./backend/pokemon')
-const users = require('./backend/user')
+const helper = require('./apis/helper');
+const pokemon = require('./apis/pokemon')
+const users = require('./apis/user')
 const app = express();
 const mongoose = require('mongoose')
 const cors = require('cors')
+const path = require('path')
 
 const mongoDBEndpoint = 'mongodb+srv://hunter:banana2@seawebdevfall2021.ykjok.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(mongoDBEndpoint,  { useNewUrlParser: true });
@@ -20,26 +21,21 @@ app.use('/api/pokemon/', pokemon);
 app.use('/api/users/', users)
 
 
-//"http://localhost:8000" + "/"
-app.get("/", function(request, response) {
-    // response.send('Hello web dev, again!!!');
-    // response.send(helper.returnWords());
-    response.send("I am preventing the next GET method from firign")
-})
 
-app.get("/", function(request, response) {
-    // response.send('Hello web dev, again!!!');
-    // response.send(helper.returnWords());
-    response.send("This is the response from the GET method")
-})
+let frontend_dir = path.join(__dirname, '..', 'frontend', 'dist')
 
-app.post("/", function(request, response) {
-    response.send("This is a response from the POST methodd");
-})
+app.use(express.static(frontend_dir));
+app.get('*', function (req, res) {
+    console.log("received request");
+    res.sendFile(path.join(frontend_dir, "index.html"));
+});
+
 
 app.listen(8000, function() {
     console.log("Starting server now...")
 })
+
+
 
 // const http = require('http');
 

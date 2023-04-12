@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 
-const UserModel = require('./db/user/user.model');
+const UserModel = require('../db/user/user.model');
 
 const userDB = [];
 
