@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const PokemonModel = require('../db/pokemon/pokemon.model');
+const jwt = require('jsonwebtoken')
 
 
 const pokemonDb = [
@@ -34,6 +35,19 @@ router.get('/findColor/:color', async function(request, response) {
 router.post('/', function(request, response) {
     const newPokemon = request.body;
 
+
+    const username = request.cookies.username;
+
+    let decryptedUsername;
+    try {
+        decryptedUsername = jwt.verify(username, "HUNTERS_PASSWORD")
+    } catch(e) {
+        return response.status(404).send("Invalid request")
+    }
+    
+
+    newPokemon.username = decryptedUsername;
+
     // if(!newPokemon.color || !newPokemon.name || !newPokemon.health) {
     //     return response.status(422).send("Missing argument to create new pokemon");
     // }
@@ -57,8 +71,20 @@ router.post('/', function(request, response) {
 })
 
 router.get('/', function(request, response) {
-    PokemonModel.returnAllPokemon()
+
+    const username = request.cookies.username;
+
+    let decryptedUsername;
+    try {
+        decryptedUsername = jwt.verify(username, "HUNTERS_PASSWORD")
+    } catch(e) {
+        return response.status(404).send("Invalid request")
+    }
+    
+
+    PokemonModel.findPokemonByUsername(decryptedUsername)
         .then(function(dbResponse) {
+            response.cookie("pokemonCount", dbResponse.length + 1)
             response.send(dbResponse)
         })
         .catch(function(error) {

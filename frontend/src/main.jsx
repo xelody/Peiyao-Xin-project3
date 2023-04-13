@@ -9,13 +9,17 @@ import {
   Route,
 } from "react-router-dom";
 import PokemonDetail from './PokemonDetail';
+import Login from './Login';
 
 const router = createBrowserRouter([
   {
     path: '/pokemon/:pokemonId',
     element: <PokemonDetail />
   },
-
+  {
+    path: '/login',
+    element: <Login />
+  },
   {
     path: '/',
     element: <Pokemons />

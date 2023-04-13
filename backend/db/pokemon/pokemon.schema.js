@@ -13,5 +13,9 @@ exports.PokemonSchema = new Schema({
         default: "green",
         require: true,
     },
+    username: { 
+        type: String,
+        require: true,
+    }
 }, { collection : 'myPokemonSpr2023' });
 

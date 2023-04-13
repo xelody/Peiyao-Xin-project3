@@ -5,6 +5,6 @@ exports.UserSchema = new Schema({
         type: String,
         unique: true,
     },
-    password: Number,
+    password: String,
 }, { collection : 'usersSpr2023' });
 

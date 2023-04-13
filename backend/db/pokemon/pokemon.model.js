@@ -24,10 +24,16 @@ function deletePokemon(pokemonId) {
     return PokemonModel.deleteOne({_id: pokemonId}).exec();
 }
 
+function findPokemonByUsername(username) {
+    return PokemonModel.find({username: username}).exec();
+
+}
+
 module.exports = {
     createPokemon,
     returnAllPokemon,
     getPokemonById,
     findPokemonByColor,
     deletePokemon,
+    findPokemonByUsername
 }
