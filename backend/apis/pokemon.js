@@ -23,7 +23,7 @@ const pokemonDb = [
 ]
 
 // request.body should include name, color and health
-
+// /api/pokemon/findColor/red
 router.get('/findColor/:color', async function(request, response) {
     const color = request.params.color;
 
@@ -32,9 +32,8 @@ router.get('/findColor/:color', async function(request, response) {
 });
 
 // POST localhost:8000/api/pokemon/
-router.post('/', function(request, response) {
+router.post('/', async function(request, response) {
     const newPokemon = request.body;
-
 
     const username = request.cookies.username;
 
@@ -52,18 +51,13 @@ router.post('/', function(request, response) {
     //     return response.status(422).send("Missing argument to create new pokemon");
     // }
 
-    console.log(1)
-    PokemonModel.createPokemon(newPokemon)
-        .then(function(dbResponse) {
-            console.log(2)
-
-            response.send("Pokemon Successfully Created")
-        })
-        .catch(function(error) {
-            response.status(500).send(error)
-        })
-    console.log(3)
-
+    try {
+        const createPokemonResponse = await PokemonModel.createPokemon(newPokemon)
+        console.log(createPokemonResponse)
+        return response.send("Pokemon Successfully Created: " + createPokemonResponse)
+    } catch (error) {
+        return response.status(500).send(error)
+    } 
 
     //    pokemonDb.push(newPokemon);
 

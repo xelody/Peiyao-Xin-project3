@@ -11,7 +11,7 @@ exports.PokemonSchema = new Schema({
     color: {
         type: String,
         default: "green",
-        require: true,
+        require: false,
     },
     username: { 
         type: String,

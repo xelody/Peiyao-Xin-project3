@@ -15,7 +15,6 @@ export default function PokemonDetail() {
 
     useEffect(function() {
         fetchAndSetPokemon()
-
     }, []);
 
     async function deletePokemon() {

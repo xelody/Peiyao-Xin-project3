@@ -5,6 +5,9 @@ exports.UserSchema = new Schema({
         type: String,
         unique: true,
     },
-    password: String,
+    password: {
+        type: String,
+        require: true,
+    }
 }, { collection : 'usersSpr2023' });
 

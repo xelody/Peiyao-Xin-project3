@@ -9,7 +9,7 @@ function createUser(user) {
 }
 
 function findUserByUsername(username) {
-    return UserModel.find({username: username}).exec();
+    return UserModel.findOne({username: username}).exec();
 }
 
 module.exports = {

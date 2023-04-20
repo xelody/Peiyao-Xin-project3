@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 export default function Login() {
     const [usernameInput, setUsernameInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
 
     const [error, setErrorValue] = useState('');
+    const navigate = useNavigate();
 
     function setUsername(event) {
         const username = event.target.value;
@@ -18,11 +20,12 @@ export default function Login() {
     }
 
     async function submit() {
+        setErrorValue('');
         try {
             const response = await axios.post('/api/users/login', {username: usernameInput, password: passwordInput})
+            navigate('/');
         } catch (e) {
-
-            setErrorValue("Username is taken, please try again!")
+            setErrorValue(e.response.data)
         }
 
         // console.log(usernameInput, passwordInput);
@@ -30,7 +33,8 @@ export default function Login() {
 
     return (
         <div>
-            {!!error && error}
+            <h1>Login</h1>
+            {!!error && <h2>{error}</h2>}
             <div>
                 <span>Username: </span><input type='text' value={usernameInput} onInput={setUsername}></input>
             </div>

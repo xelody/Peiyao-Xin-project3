@@ -44,13 +44,11 @@ export default function Pokemons() {
             ...pokemonInput, 
             /*
             health: pokemonInput.health,
-            color: pokemonInput.color,
+            name: pokemonInput.name,
             */
             color: pokemonColor 
         })
     }
-
-
 
     function setPokemonHealth(event) {
         const pokemonHealth = event.target.value;
@@ -81,8 +79,6 @@ export default function Pokemons() {
     }
 
     return (
-
-
         <div>
             <Header />
             <div>{components}</div>

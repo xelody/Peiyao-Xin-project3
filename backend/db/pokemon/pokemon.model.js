@@ -26,7 +26,6 @@ function deletePokemon(pokemonId) {
 
 function findPokemonByUsername(username) {
     return PokemonModel.find({username: username}).exec();
-
 }
 
 module.exports = {

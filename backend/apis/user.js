@@ -23,7 +23,14 @@ router.post('/login', async function(req, res) {
     const password = req.body.password;
 
     try {
-        const createUserResponse = await UserModel.createUser({username: username, password: password})
+        const createUserResponse = await UserModel.findUserByUsername(username)
+
+        console.log(createUserResponse)
+        console.log(createUserResponse.password)
+        console.log(password)
+        if (createUserResponse.password !== password) {
+            return res.status(403).send("Invalid password")
+        }
 
         const token = jwt.sign(username, "HUNTERS_PASSWORD")
 
@@ -36,15 +43,27 @@ router.post('/login', async function(req, res) {
     }
 })
 
-router.post('/create', async function(req, res) {
+router.post('/register', async function(req, res) {
     const username = req.body.username;
     const password = req.body.password;
-
-    const createUserResponse = await UserModel.createUser({username: username, password: password})
-
-    res.cookie("username", username);
     
-    return res.send("User created successfully")
+
+    try {
+        if(!username || !password) {
+            return res.status(409).send("Missing username or password")
+        }
+
+        const createUserResponse = await UserModel.createUser({username: username, password: password});
+
+        const token = jwt.sign(username, "HUNTERS_PASSWORD")
+
+        res.cookie("username", token);
+        
+        return res.send("User created successfully")
+    
+    } catch (e) {
+        res.status(401).send("Error: username already exists");
+    }
 })
 
 router.get('/isLoggedIn', async function(req, res) {
