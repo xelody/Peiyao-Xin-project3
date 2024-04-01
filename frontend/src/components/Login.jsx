@@ -1,6 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
+import Nav from './Nav'
+import '../styles/common.css';
+import '../styles/inputs.css';
 
 export default function Login() {
     const [usernameInput, setUsernameInput] = useState('');
@@ -31,18 +34,26 @@ export default function Login() {
         // console.log(usernameInput, passwordInput);
     }
 
+    function registerPage() {
+        navigate('/register');
+    }
+
     return (
         <div>
-            <h1>Login</h1>
+            <Nav />
             {!!error && <h2>{error}</h2>}
-            <div>
-                <span>Username: </span><input type='text' value={usernameInput} onInput={setUsername}></input>
+            <div className='input-fields'>
+                <div>
+                    <span>Username: </span><input type='text' value={usernameInput} onInput={setUsername}></input>
+                </div>
+                <div>
+                    <span>Password: </span><input type='text' value={passwordInput} onInput={setPassword}></input>
+                </div>
+                <div>
+                    <button onClick={submit}>Login</button>
+                    <button onClick={registerPage}>Sign up</button>
+                </div>
             </div>
-            <div>
-                <span>Password: </span><input type='text' value={passwordInput} onInput={setPassword}></input>
-            </div>
-
-            <button onClick={submit}>Create Account/Login</button>
         </div>
     )
 

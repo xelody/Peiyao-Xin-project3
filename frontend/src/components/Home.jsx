@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+
+import Nav from './Nav'
 import Header from './Header';
+import '../styles/common.css';
+import '../styles/Header.css';
 
 export default function Pokemons() {
 
@@ -80,6 +84,7 @@ export default function Pokemons() {
 
     return (
         <div>
+            <Nav />
             <Header />
             <div>{components}</div>
             <button onClick={getAllPokemons}>Click here to fetch Pokemons</button>

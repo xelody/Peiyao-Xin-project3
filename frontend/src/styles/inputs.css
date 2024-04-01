@@ -1,0 +1,47 @@
+
+
+.input-fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 100px;
+}
+
+.input-fields input {
+    width: 150px;
+    padding: 5px;
+    font-size: 16px;
+    margin: 10px 5px;
+}
+
+.input-fields .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.input-fields button {
+    margin: 30px 15px;
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #cc837e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.checkbox-container {
+    display: flex;
+    flex-direction: ROW;
+    align-items: center;
+}
+
+.input-fields button:hover {
+    background-color: #89cff0;
+}
+
+.create-account-margin {
+    margin-top: 30px;
+}

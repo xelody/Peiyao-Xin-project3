@@ -1,21 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import Pokemons from './Pokemons'
+import Home from './components/Home'
 
 import {
   createBrowserRouter,
   RouterProvider,
   Route,
 } from "react-router-dom";
-import PokemonDetail from './PokemonDetail';
-import Login from './Login';
-import CreateUser from './CreateUser';
+import Password from './components/Password';
+import Login from './components/Login';
+import CreateUser from './components/CreateUser';
 
 const router = createBrowserRouter([
   {
-    path: '/pokemon/:pokemonId',
-    element: <PokemonDetail />
+    path: '/password/:userId',
+    element: <Password />
   },
   {
     path: '/login',
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <Pokemons />
+    element: <Home />
   },
 
 
