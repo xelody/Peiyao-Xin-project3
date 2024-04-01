@@ -1,6 +1,6 @@
 const express = require('express');
 const helper = require('./apis/helper');
-const pokemon = require('./apis/pokemon')
+const password = require('./apis/password')
 const users = require('./apis/user')
 const app = express();
 const mongoose = require('mongoose')
@@ -9,7 +9,8 @@ const path = require('path')
 const cookieParser = require('cookie-parser');
 
 
-const mongoDBEndpoint = 'mongodb+srv://hunter:banana2@seawebdevfall2021.ykjok.mongodb.net/?retryWrites=true&w=majority';
+const mongoDBEndpoint = process.env.MONGODB_URI || 'mongodb://127.0.0.1/collection_name';
+
 mongoose.connect(mongoDBEndpoint,  { useNewUrlParser: true });
 
 const db = mongoose.connection;
@@ -21,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 
-app.use('/api/pokemon/', pokemon);
+app.use('/api/password/', password);
 app.use('/api/users/', users)
 
 

@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router();
-const PokemonModel = require('../db/pokemon/pokemon.model');
+const PasswordModel = require('../db/password/password.model');
 const jwt = require('jsonwebtoken')
 
 
-const pokemonDb = [
+const passwordDb = [
     {
         name: "pikachu",
         color: "yellow",
@@ -23,17 +23,17 @@ const pokemonDb = [
 ]
 
 // request.body should include name, color and health
-// /api/pokemon/findColor/red
+// /api/password/findColor/red
 router.get('/findColor/:color', async function(request, response) {
     const color = request.params.color;
 
-    const matchingPokemon = await PokemonModel.findPokemonByColor(color)
-    response.send(matchingPokemon);
+    const matchingPassword = await PasswordModel.findPasswordByColor(color)
+    response.send(matchingPassword);
 });
 
-// POST localhost:8000/api/pokemon/
+// POST localhost:8000/api/password/
 router.post('/', async function(request, response) {
-    const newPokemon = request.body;
+    const newPassword = request.body;
 
     const username = request.cookies.username;
 
@@ -45,16 +45,16 @@ router.post('/', async function(request, response) {
     }
     
 
-    newPokemon.username = decryptedUsername;
+    newPassword.username = decryptedUsername;
 
     // if(!newPokemon.color || !newPokemon.name || !newPokemon.health) {
     //     return response.status(422).send("Missing argument to create new pokemon");
     // }
 
     try {
-        const createPokemonResponse = await PokemonModel.createPokemon(newPokemon)
-        console.log(createPokemonResponse)
-        return response.send("Pokemon Successfully Created: " + createPokemonResponse)
+        const createPasswordResponse = await PasswordModel.createPassword(newPassword)
+        console.log(createPasswordResponse)
+        return response.send("Password Successfully Created: " + createPasswordResponse)
     } catch (error) {
         return response.status(500).send(error)
     } 
@@ -76,9 +76,9 @@ router.get('/', function(request, response) {
     }
     
 
-    PokemonModel.findPokemonByUsername(decryptedUsername)
+    PasswordModel.findPasswordByUsername(decryptedUsername)
         .then(function(dbResponse) {
-            response.cookie("pokemonCount", dbResponse.length + 1)
+            response.cookie("passwordCount", dbResponse.length + 1)
             response.send(dbResponse)
         })
         .catch(function(error) {
@@ -96,9 +96,9 @@ router.get('/', function(request, response) {
 
 */
 router.get('/:id', function(request, response) {
-    const pokemonId = request.params.id;
+    const passwordId = request.params.id;
 
-    PokemonModel.getPokemonById(pokemonId)
+    PasswordModel.getPasswordById(passwordId)
     .then(function(dbResponse) {
         response.send(dbResponse)
     })
@@ -128,14 +128,14 @@ router.get('/find', function(req, res) {
     const color = req.query.color;
 
     if(!color) {
-        return res.send(pokemonDb);
+        return res.send(passwordDb);
     }
 
     const output = [];
 
-    for(let pokemon of pokemonDb) {
-        if(pokemon.color === color) {
-            output.push(pokemon)
+    for(let password of passwordDb) {
+        if(password.color === color) {
+            output.push(password)
         }
     }
 
@@ -149,18 +149,18 @@ router.get('/pikachu', function(req, res) {
 })
 
 router.get('/', function(req, res) {
-    res.send("This is the the base pokemon route")
+    res.send("This is the the base password route")
 })
 
-router.delete('/:pokemonId', async function(req, response) {
-    const pokemonId = req.params.pokemonId;
+router.delete('/:passwordId', async function(req, response) {
+    const passwordId = req.params.passwordId;
 
-    const deleteResponse = await PokemonModel.deletePokemon(pokemonId)
-    return response.send("Successfully delete pokemon!")
+    const deleteResponse = await PasswordModel.deletePassword(passwordId)
+    return response.send("Successfully delete password!")
 })
 
 router.post('/', function(req, res) {
-    res.send("This is how you'll create new pokemon")
+    res.send("This is how you'll create new password")
 })
 
 module.exports = router;
