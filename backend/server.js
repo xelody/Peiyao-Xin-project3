@@ -10,7 +10,6 @@ const cookieParser = require('cookie-parser');
 
 
 const mongoDBEndpoint = process.env.MONGODB_URI || 'mongodb://127.0.0.1/collection_name';
-
 mongoose.connect(mongoDBEndpoint,  { useNewUrlParser: true });
 
 const db = mongoose.connection;
@@ -27,7 +26,7 @@ app.use('/api/users/', users)
 
 
 
-let frontend_dir = path.join(__dirname, '..', 'frontend', 'dist')
+let frontend_dir = path.join(__dirname, '..', 'frontend')
 
 app.use(express.static(frontend_dir));
 app.get('*', function (req, res) {

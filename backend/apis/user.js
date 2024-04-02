@@ -71,20 +71,20 @@ router.get('/isLoggedIn', async function(req, res) {
     const username = req.cookies.username;
 
     if(!username) {
-        return res.send({username: null})
+        return res.send({auth: false, username: null})
     }
     let decryptedUsername;
     try {
         decryptedUsername = jwt.verify(username, "HUNTERS_PASSWORD")
     } catch(e) {
-        return res.send({username: null})
+        return res.send({auth: false, username: null})
     }
     
     if(!decryptedUsername) {
 
-        return res.send({username: null})
+        return res.send({auth: false, username: null})
     } else {
-        return res.send({username: decryptedUsername})
+        return res.send({auth: true, username: decryptedUsername})
     }
 
 })

@@ -1,45 +1,32 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthContext } from './AuthContext';
 
 import '../styles/Header.css';
-import { Link } from 'react-router-dom';
 
 export default function Header() {
-
-    const [activeUsername, setActiveUsername] = useState(null)
+    const { isLoggedIn, setIsLoggedIn, activeUsername, setActiveUsername } = useContext(AuthContext);
 
     async function checkIfUserIsLoggedIn() {
-        const response = await axios.get('/api/users/isLoggedIn')
-
-        setActiveUsername(response.data.username)
-    
+        try {
+            const response = await axios.get('/api/users/isLoggedIn');
+            console.log(`check login response: ${JSON.stringify(response)}`);
+            setIsLoggedIn(response.data.auth);
+            setActiveUsername(response.data.username);
+        } catch (error) {
+            console.error('Error checking if user is logged in:', error);
+        }
     }
 
     useEffect(() => {
-        checkIfUserIsLoggedIn()
+        checkIfUserIsLoggedIn();
     }, []);
 
-    async function logOutUser() {
-
-        await axios.post('/api/users/logOut')
-        setActiveUsername(null)
-    }
-
-    if(!activeUsername) {
-
-        return (<div className='header'>
-            <Link to="/login" >Click here to login</Link>
-
-        </div>)
-
-    }
-
     return (
+        isLoggedIn ?  null : (
         <div className='header'>
-            <div >Welcome, {activeUsername}</div>
-            <button onClick={logOutUser}>Log Out!</button>
-        </div>
-
-    )
-
+            <Link to="/login">Click here to login</Link>
+        </div>)
+    );
 }

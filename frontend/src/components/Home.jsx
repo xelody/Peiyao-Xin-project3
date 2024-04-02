@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from './AuthContext';
 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -6,11 +7,12 @@ import { Link } from 'react-router-dom';
 import Nav from './Nav'
 import Header from './Header';
 import '../styles/common.css';
-import '../styles/Header.css';
 
-export default function Pokemons() {
+export default function Home() {
 
-    const [pokemons, setPokemons] = useState([]);
+    const { isLoggedIn, setIsLoggedIn, activeUsername, setActiveUsername } = useContext(AuthContext);
+
+    const [passwords, setPasswords] = useState([]);
     const [pokemonInput, setPokemonInput] = useState({
         name: '',
         color: '',
@@ -18,51 +20,51 @@ export default function Pokemons() {
     })
 
     async function getAllPokemons() {
-        const response = await axios.get('/api/pokemon/');
-        setPokemons(response.data);
+        const response = await axios.get('/api/password/');
+        setPasswords(response.data);
     }
 
 
     const components = [];
-    for(let i = 0; i < pokemons.length; i++) {
-        const pokemon = pokemons[i];
-        const pokemonComponent = (<div><Link to={'/pokemon/' + pokemon._id}>{pokemon.name}</Link> {pokemon.color} - {pokemon.health}</div>); 
-        components.push(pokemonComponent);
+    for (let i = 0; i < passwords.length; i++) {
+        const pswd = passwords[i];
+        const passwordComponent = (<div>{pswd.urlAddress} - {pswd.password}</div>);
+        components.push(passwordComponent);
     }
 
     function setPokemonName(event) {
         const pokemonName = event.target.value;
         setPokemonInput({
-            ...pokemonInput, 
+            ...pokemonInput,
             /*
             health: pokemonInput.health,
             color: pokemonInput.color,
             */
-            name: pokemonName 
+            name: pokemonName
         })
     }
 
     function setPokemonColor(event) {
         const pokemonColor = event.target.value;
         setPokemonInput({
-            ...pokemonInput, 
+            ...pokemonInput,
             /*
             health: pokemonInput.health,
             name: pokemonInput.name,
             */
-            color: pokemonColor 
+            color: pokemonColor
         })
     }
 
     function setPokemonHealth(event) {
         const pokemonHealth = event.target.value;
         setPokemonInput({
-            ...pokemonInput, 
+            ...pokemonInput,
             /*
             health: pokemonInput.health,
             color: pokemonInput.color,
             */
-            health: pokemonHealth, 
+            health: pokemonHealth,
         })
     }
 
@@ -76,24 +78,30 @@ export default function Pokemons() {
     async function createNewPokemon() {
         const response = await axios.post('/api/pokemon/', pokemonInput);
         setPokemonInput({
-            name: '', color: '', health: 0, 
+            name: '', color: '', health: 0,
         })
         await getAllPokemons();
 
     }
 
+    // async function checkLoginStatus() {
+    //     try {
+    //         setIsLoggedIn(true);
+    //     } catch (error) {
+    //         console.error('Error checking login status:', error);
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     checkLoginStatus();
+    // }, []);
+
     return (
         <div>
             <Nav />
             <Header />
-            <div>{components}</div>
-            <button onClick={getAllPokemons}>Click here to fetch Pokemons</button>
             <div>
-                Name: <input value={pokemonInput.name} onInput={setPokemonName} type='text'></input>
-                Color: <input value={pokemonInput.color} onInput={setPokemonColor} type='text'></input>
-                Health: <input value={pokemonInput.health} onInput={setPokemonHealth} type='number'></input>
-                <button onClick={createNewPokemon}>Submit New Pokemon</button>
-
+                <div>{components}</div>
             </div>
         </div>
     )

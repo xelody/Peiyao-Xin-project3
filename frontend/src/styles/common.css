@@ -31,13 +31,16 @@ nav {
     z-index: 1000;
     display: flex;
     justify-content: right;
-    align-items: center;
+    align-items: flex-start;
     height: 80px;
     line-height: 80px;
 }
 
 nav ul {
     list-style: none;
+    width: 100%;
+    display: flex;
+    justify-content: right;
     padding: 0;
     margin: 0;
 }
@@ -60,6 +63,31 @@ nav a {
 
 nav li:last-child {
     margin-right: 100px;
+}
+
+nav .username-container {
+    display: flex;
+    height: 60px;
+    align-items: center;
+    padding: 0px 10px;
+    background-color: white;
+    border-radius: 20px;
+}
+
+nav .username {
+    font-size: 24px;
+    font-weight: bold;
+    color: #cc837e; 
+}
+
+nav button {
+    font-size: 18px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #cc837e;
+    color: white;
+    border: none;
+    border-radius: 5px;
 }
 
 @media screen and (max-width:1230px) {

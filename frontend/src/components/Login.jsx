@@ -47,7 +47,7 @@ export default function Login() {
                     <span>Username: </span><input type='text' value={usernameInput} onInput={setUsername}></input>
                 </div>
                 <div>
-                    <span>Password: </span><input type='text' value={passwordInput} onInput={setPassword}></input>
+                    <span>Password: </span><input type='password' value={passwordInput} onInput={setPassword}></input>
                 </div>
                 <div>
                     <button onClick={submit}>Login</button>

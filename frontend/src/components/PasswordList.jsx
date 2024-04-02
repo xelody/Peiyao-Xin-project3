@@ -3,7 +3,7 @@ import React from 'react';
 function PasswordList({ passwords }) {
   return (
     <div>
-      {passwords.map((password, index) => (
+      {/* {passwords.map((password, index) => (
         <div key={index}>
           <div>{password.url}</div>
           <div>{password.lastUpdated}</div>
@@ -11,7 +11,7 @@ function PasswordList({ passwords }) {
           <button>Delete</button>
           <button>Update</button>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 }
