@@ -13,13 +13,11 @@ export default function Home() {
     const { isLoggedIn, setIsLoggedIn, activeUsername, setActiveUsername } = useContext(AuthContext);
 
     const [passwords, setPasswords] = useState([]);
-    const [pokemonInput, setPokemonInput] = useState({
-        name: '',
-        color: '',
-        health: 0,
-    })
+    const isHomeActive = true;
+    const isLogInActive = false;
+    const isPasswordActive = false;
 
-    async function getAllPokemons() {
+    async function getAllPasswords() {
         const response = await axios.get('/api/password/');
         setPasswords(response.data);
     }
@@ -68,37 +66,11 @@ export default function Home() {
         })
     }
 
-    /*
-    element.setListener('input', function(event) {
-        // do smething
-
-    })
-    */
-
-    async function createNewPokemon() {
-        const response = await axios.post('/api/pokemon/', pokemonInput);
-        setPokemonInput({
-            name: '', color: '', health: 0,
-        })
-        await getAllPokemons();
-
-    }
-
-    // async function checkLoginStatus() {
-    //     try {
-    //         setIsLoggedIn(true);
-    //     } catch (error) {
-    //         console.error('Error checking login status:', error);
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     checkLoginStatus();
-    // }, []);
-
     return (
         <div>
-            <Nav />
+            <Nav isHomeActive={isHomeActive}
+                isLogInActive={isLogInActive}
+                isPasswordActive={isPasswordActive} />
             <Header />
             <div>
                 <div>{components}</div>

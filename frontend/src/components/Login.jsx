@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import Nav from './Nav'
+import Modal from './Modal';
 import '../styles/common.css';
 import '../styles/inputs.css';
 
@@ -9,8 +10,13 @@ export default function Login() {
     const [usernameInput, setUsernameInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
 
-    const [error, setErrorValue] = useState('');
+    const [error, setError] = useState('');
+    const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
     const navigate = useNavigate();
+
+    const isHomeActive = false;
+    const isLogInActive = true;
+    const isPasswordActive = false;
 
     function setUsername(event) {
         const username = event.target.value;
@@ -23,15 +29,20 @@ export default function Login() {
     }
 
     async function submit() {
-        setErrorValue('');
         try {
             const response = await axios.post('/api/users/login', {username: usernameInput, password: passwordInput})
             navigate('/');
-        } catch (e) {
-            setErrorValue(e.response.data)
+        } catch (error) {
+            console.log(error);
+            setError(error.response.data);
+            setIsErrorModalOpen(true);
         }
 
         // console.log(usernameInput, passwordInput);
+    }
+
+    function closeErrorModal() {
+        setIsErrorModalOpen(false);
     }
 
     function registerPage() {
@@ -40,8 +51,10 @@ export default function Login() {
 
     return (
         <div>
-            <Nav />
-            {!!error && <h2>{error}</h2>}
+            <Nav isHomeActive={isHomeActive}
+                isLogInActive={isLogInActive}
+                isPasswordActive={isPasswordActive} />
+            <Modal isOpen={isErrorModalOpen} onClose={closeErrorModal} errorMessage={error} />
             <div className='input-fields'>
                 <div>
                     <span>Username: </span><input type='text' value={usernameInput} onInput={setUsername}></input>

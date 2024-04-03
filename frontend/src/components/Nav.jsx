@@ -4,9 +4,27 @@ import { AuthContext } from './AuthContext';
 import axios from 'axios';
 import '../styles/common.css';
 
-const Nav = () => {
+const Nav = (props) => {
   const { isLoggedIn, setIsLoggedIn, activeUsername, setActiveUsername } = useContext(AuthContext);
   let navigate = useNavigate();
+  const { isHomeActive, isLogInActive, isPasswordActive} = props;
+  let homeLiStyle = '';
+  let loginLiStyle = '';
+  let passwordLiStyle = '';
+
+  if (isHomeActive) {
+    homeLiStyle += 'active-li-text';
+  }
+
+  if (isLogInActive) {
+    loginLiStyle += 'active-li-text';
+  }
+
+  if (isPasswordActive) {
+    passwordLiStyle += 'active-li-text';
+  }
+
+  console.log(loginLiStyle);
 
   async function logOutUser() {
     try {
@@ -19,14 +37,13 @@ const Nav = () => {
     }
   }
 
-  console.log(`isLoggedIn? ${isLoggedIn}`);
   return (
     <nav>
       <ul>
+        <li><Link to="/"><span className={homeLiStyle}>Home</span></Link></li>
         {isLoggedIn ? (
           <>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to={`/password/"$activeUsername}`}>Password</Link></li>
+            <li><Link to={`/password/"$activeUsername}`}><span className={passwordLiStyle}>Password</span></Link></li>
             <li></li>
             <li></li>
             <li><div className='username-container'><span className='username'>{activeUsername}</span></div></li>
@@ -36,9 +53,8 @@ const Nav = () => {
           </>
         ) : (
           <>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/login">Log in</Link></li>
-            <li><Link to="/password">Password</Link></li>
+            <li><Link to="/login"><span className={loginLiStyle}>Log in</span></Link></li>
+            <li><Link to="/password"><span className={passwordLiStyle}>Password</span></Link></li>
           </>
         )}
       </ul>

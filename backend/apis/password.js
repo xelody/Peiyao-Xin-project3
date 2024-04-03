@@ -7,23 +7,39 @@ const jwt = require('jsonwebtoken')
 const passwordDb = [];
 
 router.post('/', async function(request, response) {
-    const {url, password} = request.body;
+    const {activeUsername, url, password} = request.body;
     const time = new Date();
-    const username = request.cookies.username;
-    const newEntryrResponse = await PasswordModel.createEntry(url, password, time, username)
-   
-    response.send("Created new entry!");
+
+    try {
+        const existingEntry = await PasswordModel.findExistingEntry(url, activeUsername);
+        console.log(existingEntry);
+
+        if (existingEntry) {
+            return response.status(400).json({ error: 'URL already exists for this username' });
+        }
+
+        const newEntryrResponse = await PasswordModel.createEntry(url, password, time, activeUsername);
+        response.send("Created new entry!");
+    } catch (error) {
+        // Handle any errors that occur during the database operation
+        console.error('Error creating new entry:', error);
+        response.status(500).send('Internal Server Error');
+    }
+    
 })
 
 
+router.get('/:username', async function(request, response) {
+    const passwordList = 
+        await PasswordModel.findPasswordByUsername(request.params.username);
+    
+    const accessibleList = 
+        await PasswordModel.findPasswordByAccessUser(request.params.username);
 
+    const combinedList = [...passwordList, ...accessibleList];
 
-// router.get('/findColor/:color', async function(request, response) {
-//     const color = request.params.color;
-
-//     const matchingPassword = await PasswordModel.findPasswordByColor(color)
-//     response.send(matchingPassword);
-// });
+    response.send(combinedList);
+});
 
 
 // router.post('/', async function(request, response) {

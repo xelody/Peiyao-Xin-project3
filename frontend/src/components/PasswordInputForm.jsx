@@ -16,20 +16,60 @@ function PasswordInputForm({ onSubmit }) {
             alert('Please enter a URL');
             return;
         }
-        if (!password && !(alphabet || numerals || symbols)) {
-            alert('Please enter a password or select at least one checkbox');
-            return;
-        }
-        if (!password && (parseInt(length) < 4 || parseInt(length) > 50)) {
+
+        if (password && password.length < 4) {
             alert('Password length should be between 4 and 50 characters');
             return;
         }
+
         // Generate password if not provided
+        let finalPassword = password;
         if (!password) {
-            // Generate password logic
+            if (parseInt(length) < 4 || parseInt(length) > 50) {
+                alert('Password length should be between 4 and 50 characters');
+                return;
+            }
+
+            if (!(alphabet || numerals || symbols)) {
+                alert('Please select at least one checkbox');
+                return;
+            }
+
+            if (!length) {
+                alert('Please enter a desired password length');
+                return;                
+            }
+
+            let selectedChars = '';
+            const alphabetChar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numberChar = '0123456789';
+            const symbolChar = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+            // Build a string of characters based on selected checkboxes
+            if (alphabet) {
+                selectedChars += alphabetChar;
+                const randomIndex = Math.floor(Math.random() * alphabetChar.length);
+                finalPassword += alphabetChar[randomIndex];
+            }
+            if (numerals) {
+                selectedChars += numberChar;
+                const randomIndex = Math.floor(Math.random() * numberChar.length);
+                finalPassword += numberChar[randomIndex];
+            }
+            if (symbols) {
+                selectedChars += symbolChar;
+                const randomIndex = Math.floor(Math.random() * symbolChar.length);
+                finalPassword += symbolChar[randomIndex];
+            }
+        
+            // Generate the rest of the password randomly from selected characters
+            while (finalPassword.length < length) {
+                const randomIndex = Math.floor(Math.random() * selectedChars.length);
+                finalPassword += selectedChars[randomIndex];
+            }
         }
         // Submit form
-        onSubmit({ url, password });
+        onSubmit({ url, password: finalPassword });
         // Reset form fields
         setUrl('');
         setPassword('');

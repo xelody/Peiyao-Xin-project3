@@ -39,7 +39,7 @@ router.post('/login', async function(req, res) {
         return res.send("User created successfully")
     
     } catch (e) {
-        res.status(401).send(null);
+        res.status(401).send("Missing username");
     }
 })
 
