@@ -1,10 +1,7 @@
 const Schema = require('mongoose').Schema;
 
 exports.PasswordSchema = new Schema({
-    urlAddress: {
-        type: String,
-        require: true,
-    },
+    urlAddress: String,
     password: {
         type: String,
         require: true,

@@ -8,11 +8,9 @@ body {
 .content-box {
     height: auto;
     width: 90%;
-    margin: 50px auto;
-    padding: 50px;
     display: flex;
     justify-content: center;
-    margin-left: 10%;
+    margin-left: 5%;
 }
 
 h1 {
