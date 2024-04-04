@@ -94,6 +94,10 @@ nav .active-li-text {
     color: #89cff0;
 }
 
+.button-container button {
+    margin-right: 15px;
+}
+
 @media screen and (max-width:1230px) {
     nav h1 {
         font-size: 32px;

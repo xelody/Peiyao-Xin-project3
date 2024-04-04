@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/ajorgense1-chwy/cs5610_spr23_mod3#readme",
   "dependencies": {
+    "valid-url": "^1.0.9"
   },
   "devDependencies": {
     "concurrently": "^8.0.1"

@@ -18,6 +18,10 @@ exports.PasswordSchema = new Schema({
     accessUser: {
         type: String,
         required: false,
+    },
+    acceptShareRequest: {
+        type: Boolean,
+        required: false,
     }
 }, { collection : 'myPasswordSpr2023' });
 

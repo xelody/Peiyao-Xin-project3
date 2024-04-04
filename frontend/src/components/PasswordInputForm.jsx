@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import validUrl from 'valid-url';
 import '../styles/inputs.css';
 
 function PasswordInputForm({ onSubmit }) {
@@ -9,10 +10,15 @@ function PasswordInputForm({ onSubmit }) {
     const [symbols, setSymbols] = useState(false);
     const [length, setLength] = useState('');
 
+    function isValidURL(url) {
+        return validUrl.isWebUri(url);
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
+
         // Validate input
-        if (!url) {
+        if (!url || !isValidURL(url)) {
             alert('Please enter a URL');
             return;
         }
@@ -37,7 +43,7 @@ function PasswordInputForm({ onSubmit }) {
 
             if (!length) {
                 alert('Please enter a desired password length');
-                return;                
+                return;
             }
 
             let selectedChars = '';
@@ -61,7 +67,7 @@ function PasswordInputForm({ onSubmit }) {
                 const randomIndex = Math.floor(Math.random() * symbolChar.length);
                 finalPassword += symbolChar[randomIndex];
             }
-        
+
             // Generate the rest of the password randomly from selected characters
             while (finalPassword.length < length) {
                 const randomIndex = Math.floor(Math.random() * selectedChars.length);
@@ -70,7 +76,10 @@ function PasswordInputForm({ onSubmit }) {
         }
         // Submit form
         onSubmit({ url, password: finalPassword });
-        // Reset form fields
+    };
+
+    const handleClear = () => {
+        // Clear all input fields
         setUrl('');
         setPassword('');
         setAlphabet(false);
@@ -94,12 +103,13 @@ function PasswordInputForm({ onSubmit }) {
                     <input type="checkbox" checked={numerals} onChange={(e) => setNumerals(e.target.checked)} /> Numerals
                     <input type="checkbox" checked={symbols} onChange={(e) => setSymbols(e.target.checked)} /> Symbols
                 </div>
-            
+
                 <div>
                     <span>Length: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <input type="number" value={length} onChange={(e) => setLength(e.target.value)} placeholder="Length" />
                 </div>
                 <button type="submit">Submit</button>
+                <button type="button" onClick={handleClear}>Clear</button>
             </form>
         </div>
     );

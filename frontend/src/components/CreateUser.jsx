@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
+import { AuthContext } from './AuthContext';
 import Nav from './Nav';
 import Modal from './Modal';
 import '../styles/common.css';
@@ -12,6 +13,7 @@ export default function CreateUser() {
     const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
     const [error, setError] = useState('');
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+    const { isLoggedIn, setIsLoggedIn, activeUsername, setActiveUsername } = useContext(AuthContext);
     const navigate = useNavigate();
 
     function setUsername(event) {
@@ -38,7 +40,8 @@ export default function CreateUser() {
             }
 
             const response = await axios.post('/api/users/register', {username: usernameInput, password: passwordInput});
-            navigate('/');
+            setActiveUsername(usernameInput);
+            navigate(`/password/${activeUsername}`);
         } catch (error) {
             console.log(error);
             setError(error.response.data);

@@ -22,13 +22,18 @@ router.post('/login', async function(req, res) {
     const username = req.body.username;
     const password = req.body.password;
 
-    try {
-        const createUserResponse = await UserModel.findUserByUsername(username)
+    if (username === '') {
+        return res.status(401).send("Missing username");
+    }
 
-        console.log(createUserResponse)
-        console.log(createUserResponse.password)
-        console.log(password)
-        if (createUserResponse.password !== password) {
+    try {
+        const getUserResponse = await UserModel.findUserByUsername(username)
+
+        if (!getUserResponse) {
+            return res.status(401).send("Please verify username");
+        }
+
+        if (getUserResponse.password !== password) {
             return res.status(403).send("Invalid password")
         }
 
@@ -39,7 +44,8 @@ router.post('/login', async function(req, res) {
         return res.send("User created successfully")
     
     } catch (e) {
-        res.status(401).send("Missing username");
+        console.error('Error logging in user:', error);
+        response.status(500).json({ error: 'Internal Server Error' });
     }
 })
 

@@ -31,6 +31,7 @@ router.post('/', async function (request, response) {
 router.post('/share/:passwordId', async function (request, response) {
     const { passwordId } = request.params;
     const { accessUser } = request.body;
+    console.log(accessUser);
 
     try {
         const targetUser = await UserModel.findUserByUsername(accessUser);
@@ -67,8 +68,6 @@ router.post('/share/:passwordId', async function (request, response) {
 
 })
 
-
-
 router.get('/:username', async function (request, response) {
     const passwordList =
         await PasswordModel.findPasswordByUsername(request.params.username);
@@ -81,9 +80,21 @@ router.get('/:username', async function (request, response) {
     response.send(combinedList);
 });
 
+router.get('/pending/:username', async function (request, response) {
+    try {
+        const pendingRequests =
+            await PasswordModel.findPendingRequest(request.params.username);
+        response.send(pendingRequests);
+    } catch (error) {
+        console.error('Error fetching pending requests:', error);
+        response.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 router.put('/:passwordId', async function (request, response) {
     const { passwordId } = request.params;
     const { password } = request.body;
+
     try {
         const updatedPassword = await PasswordModel.findByIdAndUpdate(passwordId, password);
 
@@ -97,6 +108,25 @@ router.put('/:passwordId', async function (request, response) {
         response.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+router.put('/pending/:passwordId', async function (request, response) {
+    const { passwordId } = request.params;
+
+    try {
+        const acceptRequest = await PasswordModel.findByIdAndAccept(passwordId);
+
+        if (!acceptRequest) {
+            return response.status(404).json({ error: 'Password not found' });
+        }
+
+        response.json(acceptRequest);
+    } catch (error) {
+        console.error('Error accept request:', error);
+        response.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
 
 router.delete('/:passwordId', async function (request, response) {
     const { passwordId } = request.params;

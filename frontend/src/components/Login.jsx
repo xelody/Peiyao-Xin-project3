@@ -1,6 +1,7 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router';
+import { AuthContext } from './AuthContext';
 import Nav from './Nav'
 import Modal from './Modal';
 import '../styles/common.css';
@@ -9,6 +10,7 @@ import '../styles/inputs.css';
 export default function Login() {
     const [usernameInput, setUsernameInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
+    const { isLoggedIn, setIsLoggedIn, activeUsername, setActiveUsername } = useContext(AuthContext);
 
     const [error, setError] = useState('');
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
@@ -31,7 +33,8 @@ export default function Login() {
     async function submit() {
         try {
             const response = await axios.post('/api/users/login', {username: usernameInput, password: passwordInput})
-            navigate('/');
+            setActiveUsername(usernameInput);
+            navigate(`/password/${activeUsername}`);
         } catch (error) {
             console.log(error);
             setError(error.response.data);
