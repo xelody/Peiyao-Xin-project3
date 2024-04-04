@@ -1,8 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
-import { toast } from 'react-toastify';
+import { faCopy, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Nav from './Nav';
@@ -27,6 +26,9 @@ export default function Password() {
     const [pendingRequests, setPendingRequests] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showModal, setShowModal] = useState(false);
+    const [passwordVisible, setPasswordVisible] = useState({});
+    const [passwordText, setPasswordText] = useState({});
+    const [eyeIcons, setEyeIcons] = useState({});
 
     const isHomeActive = false;
     const isLogInActive = false;
@@ -168,40 +170,68 @@ export default function Password() {
         }
     };
 
-    const passwordRows = passwords.map(password => (
-        <tr key={password._id}>
-            <td>{password.urlAddress}</td>
-            <td>
-                <span className='password-text'>{password.password}</span>
-                <button onClick={() => handleCopyPassword(password.password)}>
-                    <FontAwesomeIcon icon={faCopy} />
-                </button>
-            </td>
-            <td>{formatDate(password.time)}</td>
-            <td>{password.username !== activeUsername ? password.username : ''}</td>
-            {password.username === activeUsername ? (
-                <>
+    const handleTogglePasswordVisibility = (passwordId) => {
+        setPasswordVisible((prevState) => ({
+            ...prevState,
+            [passwordId]: !prevState[passwordId],
+        }));
+
+        setEyeIcons((prevState) => ({
+            ...prevState,
+            [passwordId]: 
+                (prevState[passwordId] || faEye) === faEye ? faEyeSlash : faEye,
+        }));
+
+        setPasswordText((prevState) => ({
+            ...prevState,
+            [passwordId]:
+                prevState[passwordId] === faEye ? passwords.find(p => p._id === passwordId).password : '●'.repeat(8),
+        }));
+    };
+
+
+    const passwordRows = passwords.map(password => {
+        const passwordId = password._id;
+        const isVisible = passwordVisible[passwordId] || false;
+        const text = isVisible ? password.password : '●'.repeat(8);
+
+        return (
+            <tr key={password._id}>
+                <td>{password.urlAddress}</td>
+                <td>
+                    <span className='password-text'>{text}</span>
+                    <button onClick={() => handleTogglePasswordVisibility(password._id)}>
+                        <FontAwesomeIcon icon={eyeIcons[password._id] || faEye} />
+                    </button>
+                    <button onClick={() => handleCopyPassword(password.password)}>
+                        <FontAwesomeIcon icon={faCopy} />
+                    </button>
+                </td>
+                <td>{formatDate(password.time)}</td>
+                <td>{password.username !== activeUsername ? password.username : ''}</td>
+                {password.username === activeUsername ? (
                     <td>
                         <input
                             type='text'
-                            value={newPasswordInputs[password._id] || ''}
-                            onChange={(e) => setNewPasswordInputs(prevState => ({ ...prevState, [password._id]: e.target.value }))}
+                            value={newPasswordInputs[passwordId] || ''}
+                            onChange={(e) => setNewPasswordInputs(prevState => ({ ...prevState, [passwordId]: e.target.value }))}
                             placeholder="Enter new password"
                         />
-                        <button onClick={() => handleUpdate(password._id)}>Update</button>
-                        <button onClick={() => handleDelete(password._id)}>Delete</button>
+                        <button onClick={() => handleUpdate(passwordId)}>Update</button>
+                        <button onClick={() => handleDelete(passwordId)}>Delete</button>
                         <input
                             type='text'
-                            value={newShareInputs[password._id] || ''}
-                            onChange={(e) => setNewShareInputs(prevState => ({ ...prevState, [password._id]: e.target.value }))}
+                            value={newShareInputs[passwordId] || ''}
+                            onChange={(e) => setNewShareInputs(prevState => ({ ...prevState, [passwordId]: e.target.value }))}
                             placeholder="Enter an username"
                         />
-                        <button onClick={() => handleShare(password._id)}>Share</button>
+                        <button onClick={() => handleShare(passwordId)}>Share</button>
                     </td>
-                </>
-            ) : (<><td></td></>)}
-        </tr>
-    ));
+                ) : (<td></td>)}
+            </tr>
+        );
+    });
+
 
     return isLoggedIn ? (
         <div>
