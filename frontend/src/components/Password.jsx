@@ -1,5 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState, useContext } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Nav from './Nav';
 import Header from './Header';
@@ -7,6 +11,7 @@ import PasswordInputForm from './PasswordInputForm';
 import formatDate from "./FormatDate"
 import ConfirmationModal from "./ConfirmationModal";
 import { AuthContext } from './AuthContext';
+
 
 import '../styles/common.css';
 import '../styles/inputs.css';
@@ -154,10 +159,24 @@ export default function Password() {
         }
     }
 
+    const handleCopyPassword = async (password) => {
+        try {
+            await navigator.clipboard.writeText(password);
+        } catch (error) {
+            console.error('Error copying password to clipboard:', error);
+            alert('Failed to copy password to clipboard.');
+        }
+    };
+
     const passwordRows = passwords.map(password => (
         <tr key={password._id}>
             <td>{password.urlAddress}</td>
-            <td>{password.password}</td>
+            <td>
+                <span className='password-text'>{password.password}</span>
+                <button onClick={() => handleCopyPassword(password.password)}>
+                    <FontAwesomeIcon icon={faCopy} />
+                </button>
+            </td>
             <td>{formatDate(password.time)}</td>
             <td>{password.username !== activeUsername ? password.username : ''}</td>
             {password.username === activeUsername ? (
