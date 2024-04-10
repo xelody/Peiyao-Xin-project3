@@ -16,7 +16,6 @@ export default function Home() {
             <Nav isHomeActive={isHomeActive}
                 isLogInActive={isLogInActive}
                 isPasswordActive={isPasswordActive} />
-            <Header />
             <div className='content-box box-border'>
                 <img src={iconImage} className='icon' alt='Icon' />
                 <div>

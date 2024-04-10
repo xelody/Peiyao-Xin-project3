@@ -45,6 +45,16 @@ export default function Password() {
     };
 
     const handleUpdate = async (passwordId) => {
+        if (!newPasswordInputs[passwordId]) {
+            alert("Password cannot be empty");
+            return;
+        }
+
+        if (newPasswordInputs[passwordId].length < 4 || newPasswordInputs[passwordId].length > 50) {
+            alert("Password length must be between 4 and 50 characters");
+            return;
+        }
+
         try {
             const response = await axios.put(`/api/password/${passwordId}`, { password: newPasswordInputs[passwordId] });
             console.log('Password updated successfully:', response.data);

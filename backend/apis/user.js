@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const jwt = require('jsonwebtoken')
+const bcrypt = require("bcryptjs")
 
 const UserModel = require('../db/user/user.model');
 
@@ -33,11 +34,11 @@ router.post('/login', async function(req, res) {
             return res.status(401).send("Please verify username");
         }
 
-        if (getUserResponse.password !== password) {
+        if (!bcrypt.compareSync(password, getUserResponse.password)) {
             return res.status(403).send("Invalid password")
         }
 
-        const token = jwt.sign(username, "HUNTERS_PASSWORD")
+        const token = jwt.sign(username, "PEIYAOS_PASSWORD")
 
         res.cookie("username", token);
         
@@ -52,16 +53,16 @@ router.post('/login', async function(req, res) {
 router.post('/register', async function(req, res) {
     const username = req.body.username;
     const password = req.body.password;
-    
 
     try {
         if(!username || !password) {
             return res.status(409).send("Missing username or password")
         }
 
-        const createUserResponse = await UserModel.createUser({username: username, password: password});
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        const createUserResponse = await UserModel.createUser({username: username, password: hashedPassword});
 
-        const token = jwt.sign(username, "HUNTERS_PASSWORD")
+        const token = jwt.sign(username, "PEIYAOS_PASSWORD")
 
         res.cookie("username", token);
         
@@ -81,7 +82,7 @@ router.get('/isLoggedIn', async function(req, res) {
     }
     let decryptedUsername;
     try {
-        decryptedUsername = jwt.verify(username, "HUNTERS_PASSWORD")
+        decryptedUsername = jwt.verify(username, "PEIYAOS_PASSWORD")
     } catch(e) {
         return res.send({auth: false, username: null})
     }
