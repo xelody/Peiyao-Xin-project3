@@ -45,3 +45,16 @@
 .create-account-margin {
     margin-top: 30px;
 }
+
+@media screen and (max-width:860px) {
+    .input-fields {
+        margin: 20px;
+    }
+
+    .input-fields input {
+        width: 100px;
+        padding: 5px;
+        font-size: 12px;
+        margin: 5px 0px;
+    }
+}
