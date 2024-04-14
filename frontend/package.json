@@ -6,7 +6,7 @@
   "proxy": "http://localhost:8000/",
   "scripts": {
     "dev": "vite",
-    "build": "vite build & ls -lt",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
