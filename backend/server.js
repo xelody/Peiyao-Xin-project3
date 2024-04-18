@@ -1,7 +1,6 @@
 const express = require('express');
-const helper = require('./backend/apis/helper');
-const password = require('./backend/apis/password')
-const users = require('./backend/apis/user')
+const password = require('./apis/password')
+const users = require('./apis/user')
 const app = express();
 const mongoose = require('mongoose')
 const cors = require('cors')
@@ -26,7 +25,7 @@ app.use('/api/users/', users)
 
 
 
-let frontend_dir = path.join(__dirname, 'dist');
+let frontend_dir = path.join(__dirname, '..', 'frontend', 'dist')
 
 app.use(express.static(frontend_dir));
 app.get('*', function (req, res) {
