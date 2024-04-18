@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import validUrl from 'valid-url';
+import isURL from 'validator/lib/isURL';
 import '../styles/inputs.css';
+
 
 function PasswordInputForm({ onSubmit }) {
     const [url, setUrl] = useState('');
@@ -10,15 +11,11 @@ function PasswordInputForm({ onSubmit }) {
     const [symbols, setSymbols] = useState(false);
     const [length, setLength] = useState('');
 
-    function isValidURL(url) {
-        return validUrl.isWebUri(url);
-    }
-
     const handleSubmit = (event) => {
         event.preventDefault();
 
         // Validate input
-        if (!url || !isValidURL(url)) {
+        if (!url || !isURL(url, {require_protocol: false})) {
             alert('Please enter a URL');
             return;
         }
