@@ -170,6 +170,10 @@ nav .active-li-text {
 }
 
 @media screen and (max-width:600px) {
+    body {
+        margin-left: 15px;
+    }
+
     nav h1 {
         display: none;
     }
